@@ -1,23 +1,23 @@
 {
-  "_instructions": "Fill in this file after completing your first project. One entry per YouTube channel. See Brand/brand_guardian.md for field descriptions.",
+  "_instructions": "One entry per YouTube channel. Read by motion_designer, graphic_designer, and brand_guardian. Source of truth for all visual brand decisions.",
   "_last_updated": "2026-05-17",
   "channels": {
-    "example_channel_name": {
-      "_status": "PLACEHOLDER — replace with real values after first project",
+    "WARPMUZ": {
+      "_status": "ACTIVE",
       "youtube_url": "https://www.youtube.com/@WARPMUZ",
       "genre": "ballad",
-      "mood_range": ["melancholic", "cinematic", "hopeful"],
+      "mood_range": ["melancholic", "cinematic", "hopeful", "bittersweet", "intimate"],
       "primary": "#1A1A2E",
       "secondary": "#16213E",
-      "accent": "#0F3460",
-      "highlight": "#E94560",
+      "accent": "#C8A96E",
+      "highlight": "#E8D5B7",
       "text_light": "#FFFFFF",
       "text_dark": "#111111",
       "color_grade_preset": "cinematic_teal_orange",
       "thumbnail_font": "Arial Bold",
-      "thumbnail_layout": "Left-aligned song title top third, artist name bottom left, high-contrast subject center-right",
+      "thumbnail_layout": "Dominant subject center-left. Song title large top-right or bottom-left, high contrast against dark background. Artist name smaller, below title. Cool/desaturated color temperature.",
       "upload_cadence": "1 video per month",
-      "target_audience": "Adults 25–45 who listen to cinematic and emotional music"
+      "target_audience": "Adults 25–50 who listen to cinematic and emotional music"
     }
   },
   "_notes": [

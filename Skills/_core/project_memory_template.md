@@ -1,5 +1,9 @@
 # PROJECT_STATE — [SONG TITLE]
-> **Template Version:** 1.0 | Copy this file to `Projects/[Song Title]/PROJECT_STATE.md` and fill in the fields.
+> **Template Version:** 1.1 | Copy this file to `Projects/[Song Title]/PROJECT_STATE.md` and fill in the fields.
+>
+> **Companion files in this project folder:**
+> - `PROJECT_STATE.md` — this file. Permanent record. Managed by CEO.
+> - `PROJECT_CONTEXT.md` — session scratchpad (temporary, not in human_log). Created by CEO at session start. Cleared/archived after 3 days.
 
 ---
 
@@ -23,7 +27,7 @@ last_updated: ""
 
 ```yaml
 intake_complete: false            # set to true by project_intake worker
-current_stage: "intake"           # intake | concept | lyrics | music_direction | casting | locations | script | audio_production | image_generation | video_generation | video_edit | color_grade | sound_design | motion_design | graphics | export | youtube_upload | distribution | social | analytics | complete
+current_stage: "intake"           # intake | concept | lyrics | music_direction | casting | locations | script | audio_production | lyric_alignment | creative_design | image_generation | video_generation | video_edit | color_grade | sound_design | motion_design | graphics | export | youtube_upload | distribution | social | analytics | retrospective | complete
 blocked: false
 blocked_reason: ""
 next_action: "Run project_intake skill to analyze existing files and complete project setup."
@@ -40,18 +44,21 @@ next_action: "Run project_intake skill to analyze existing files and complete pr
 | 6 | locations | ⬜ pending | NO — text mood boards | — |
 | 7 | script | ⬜ pending | YES — human approves scene script | — |
 | 8 | audio_production | ⬜ pending | YES — human picks best SUNO take | — |
-| 9 | image_generation | ⬜ pending | NO — batch run | — |
-| 10 | video_generation | ⬜ pending | NO — batch run | — |
-| 11 | video_edit | ⬜ pending | NO — FFmpeg assembly | — |
-| 12 | color_grade | ⬜ pending | NO — auto LUT | — |
-| 13 | sound_design | ⬜ pending | NO — auto normalize | — |
-| 14 | motion_design | ⬜ pending | NO — template apply | — |
-| 15 | graphics | ⬜ pending | YES — human approves thumbnail | — |
-| 16 | export | ⬜ pending | NO — format batch | — |
-| 17 | youtube_upload | ⬜ pending | YES — human approves metadata | — |
-| 18 | distribution | ⬜ pending | YES — human executes upload | — |
-| 19 | social | ⬜ pending | NO — clip cuts auto | — |
-| 20 | analytics | ⬜ pending | NO — reporting only | — |
+| 9 | lyric_alignment | ⬜ pending | NO — Whisper auto-timestamps | — |
+| 10 | creative_design | ⬜ pending | NO — storyboard arrangement auto | — |
+| 11 | image_generation | ⬜ pending | YES — human approves each image | — |
+| 12 | video_generation | ⬜ pending | NO — batch run | — |
+| 13 | video_edit | ⬜ pending | NO — FFmpeg / DaVinci assembly | — |
+| 14 | color_grade | ⬜ pending | NO — auto LUT | — |
+| 15 | sound_design | ⬜ pending | NO — auto normalize | — |
+| 16 | motion_design | ⬜ pending | NO — template apply | — |
+| 17 | graphics | ⬜ pending | YES — human approves thumbnail | — |
+| 18 | export | ⬜ pending | NO — format batch | — |
+| 19 | youtube_upload | ⬜ pending | YES — human approves metadata | — |
+| 20 | distribution | ⬜ pending | YES — human executes upload | — |
+| 21 | social | ⬜ pending | NO — clip cuts auto | — |
+| 22 | analytics | ⬜ pending | NO — reporting only | — |
+| 23 | retrospective | ⬜ pending | YES — human approves skill changes | — |
 
 ---
 
@@ -60,7 +67,9 @@ next_action: "Run project_intake skill to analyze existing files and complete pr
 ```yaml
 decisions:
   soul_id_required: false         # set by casting_director
-  soul_id_reference: ""           # path or Higgsfield Soul ID string
+  soul_id_reference_man: ""       # Higgsfield Soul ID string for male character (set by soul_identity skill)
+  soul_id_reference_woman: ""     # Higgsfield Soul ID string for female character (set by soul_identity skill)
+  soul_id_reference: ""           # legacy field — do not use for new projects; kept for back-compat
   suno_style_prompt: ""           # locked after music_direction stage
   suno_selected_take: ""          # filename of chosen audio take
   video_aspect_ratio: "16:9"      # 16:9 | 9:16 | 1:1
@@ -161,3 +170,16 @@ spend_log:
 ```
 [no notes yet]
 ```
+
+---
+
+## Genre Context
+
+> Populated by CEO when genre module is loaded. Do not edit manually.
+
+```yaml
+genre_module_loaded: false
+genre_module_path: ""             # e.g. Skills/genres/ballad.md
+genre_parameters_active: false
+```
+

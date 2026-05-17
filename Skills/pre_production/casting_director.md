@@ -6,8 +6,8 @@
 **Outputs:** `Lyrics/CASTING_[project_id].md` — character dossiers and Soul ID decision
 **Tools:** Higgsfield CLI (Soul ID path only), file system
 **Human Gate:** NO — auto-generated; CEO routes to soul_identity skill if Soul ID flagged as required
-**Reads from PROJECT_STATE:** `genre`, `mood`, `decisions.soul_id_required`, `decisions.soul_id_reference`
-**Writes to PROJECT_STATE:** `decisions.soul_id_required`, `decisions.soul_id_reference`, `current_stage → locations`
+**Reads from PROJECT_STATE:** `genre`, `mood`, `decisions.soul_id_required`, `decisions.soul_id_reference_man`, `decisions.soul_id_reference_woman`
+**Writes to PROJECT_STATE:** `decisions.soul_id_required`, `decisions.soul_id_reference_man`, `decisions.soul_id_reference_woman`, `current_stage → locations`
 **Version History:** v1.0 — Initial release (2026-05-17)
 
 ---
@@ -113,14 +113,16 @@ Era / setting: [e.g. "Contemporary, slightly timeless — no visible logos or da
 ```yaml
 decisions:
   soul_id_required: [true/false]
-  soul_id_reference: "[path to reference photo or empty]"
+  soul_id_reference_man: "[Higgsfield Soul ID string for male character, or empty]"
+  soul_id_reference_woman: "[Higgsfield Soul ID string for female character, or empty]"
+  # Note: leave empty if Soul ID is not yet trained — soul_identity skill will fill this in
 current_stage: "locations"
 next_action: "Run location_scout skill."
 ```
 
-If `soul_id_required = true` and `soul_id_reference` is empty:
+If `soul_id_required = true` and both references are empty:
 ```yaml
 blocked: true
-blocked_reason: "Soul ID required but no reference photo provided. Human must supply a portrait photo."
-next_action: "Human: place reference portrait photo in Brand/assets/ and add path to decisions.soul_id_reference"
+blocked_reason: "Soul ID required but not yet trained. CEO will insert soul_identity skill before image_generation."
+next_action: "Proceed to locations stage. Soul ID training will run after audio_production."
 ```

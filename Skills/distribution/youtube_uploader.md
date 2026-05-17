@@ -74,9 +74,9 @@ Alt:  Marketing/Thumbnail/thumbnail_alt.png
 [Emotional descriptor — 2-3 words] | [Song Title] — [Artist Name] (Official Music Video)
 
 Examples by genre:
-  Ballad:    "Empty Station | Blue Rain — [Artist] (Official Music Video)"
-  Pop:       "Can't Stop Running | Blue Rain — [Artist] (Official Music Video)"
-  Hip-Hop:   "No Looking Back | Blue Rain — [Artist] (Official Music Video)"
+  Ballad:    "Empty Station | [Song Title] — [Artist] (Official Music Video)"
+  Pop:       "Can't Stop Running | [Song Title] — [Artist] (Official Music Video)"
+  Hip-Hop:   "No Looking Back | [Song Title] — [Artist] (Official Music Video)"
 
 Chosen title: [GENERATED TITLE]
 Character count: [N] / 100 max  ← keep under 70 for mobile display

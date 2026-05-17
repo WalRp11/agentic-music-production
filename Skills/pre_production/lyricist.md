@@ -12,49 +12,6 @@
 
 ---
 
-## INSTALL GUIDE — Adding This Skill to Your Agent
-
-### Claude Code
-```bash
-# Copy this skill to your Claude Code skills directory
-cp lyricist.md ~/.claude/skills/lyricist.md
-
-# Or on Windows:
-copy lyricist.md %USERPROFILE%\.claude\skills\lyricist.md
-```
-Then in Claude Code, reference it as a context file:
-```
-/add-context ~/.claude/skills/lyricist.md
-```
-Or set it as a permanent skill in your `.claude/settings.json`:
-```json
-{
-  "skills": ["~/.claude/skills/lyricist.md"]
-}
-```
-
-### OpenAI Codex CLI
-```bash
-# Copy this skill to your Codex CLI skills directory
-cp lyricist.md ~/.codex/skills/lyricist.md
-
-# Or on Windows:
-copy lyricist.md %USERPROFILE%\.codex\skills\lyricist.md
-```
-Reference in your Codex session:
-```
-codex --skill lyricist.md "Write lyrics for a melancholic pop song about leaving home"
-```
-
-### Quick-Start (without CEO orchestrator)
-You can use this skill as a standalone tool without the full company pipeline:
-1. Provide the agent with this skill file as context
-2. Give it the concept: story, genre, mood, language, reference song (optional)
-3. It will produce the Analysis file, then the Lyrics file
-4. Copy the SUNO section directly into SUNO's style + lyrics fields
-
----
-
 ## Genre Modifier System
 
 Set the genre tag in PROJECT_STATE or tell the agent directly. The genre modifier adjusts syllable strictness, rhyme scheme norms, SUNO prompt style, and SEO approach.
@@ -324,12 +281,10 @@ Automatically banned phrases (non-exhaustive):
 
 ---
 
-## Ballad Mode Reference
+## Genre Modifier Reference
 
-> Activated when `genre = ballad`. Applies these additional rules on top of the universal rules above.
-
-- **Syllable strictness: HIGH.** Every line must match the ANALYSIS syllable count exactly. The "pendulum effect" of a ballad is destroyed by irregular line lengths.
-- **Rhyme scheme:** ABCB preferred (second and fourth lines rhyme, first and third are free). Avoid forced AABB in verses — it sounds childish in a ballad.
-- **Tempo of language:** Use longer words, multi-syllable words in emotional climaxes. Use short monosyllabic words in intimate, quiet passages.
-- **The 3-Act Structure:** Connection (warmth, memory) → The Rift (distance, loss) → Finality (acceptance, stillness). Map verses 1/2 to acts 1/2, bridge to turning point, final chorus to act 3.
-- **SUNO prompt additions:** Always include tempo (slow, 50–75bpm), key (minor preferred), and atmospheric sound signatures (reverb, vinyl crackle, soft piano intro).
+> Genre-specific parameters — syllable strictness, rhyme scheme, preferred structure, SUNO prompt additions, and tone rules — are defined per genre in `Skills/genres/[genre].md`.
+>
+> The CEO loads the correct genre module automatically when `genre` is set in PROJECT_STATE. Those parameters override the generic defaults above for the active project.
+>
+> Do not hardcode genre rules here. If you need genre guidance while writing, read the active genre module via `Skills/genres/_index.md` → then the appropriate genre file.

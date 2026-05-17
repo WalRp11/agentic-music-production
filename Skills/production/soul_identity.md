@@ -6,8 +6,8 @@
 **Outputs:** Soul ID reference string (stored in `decisions.soul_id_reference`), `Brand/assets/soul_identity_guide.md`
 **Tools:** Higgsfield CLI (`higgsfield soul-id create`, `higgsfield soul-id list`)
 **Human Gate:** YES — the human MUST build the character themselves in Higgsfield. The AI cannot reliably generate consistent faces across multiple independent image generations.
-**Reads from PROJECT_STATE:** `decisions.soul_id_required`, `decisions.soul_id_reference`
-**Writes to PROJECT_STATE:** `decisions.soul_id_reference`
+**Reads from PROJECT_STATE:** `decisions.soul_id_required`, `decisions.soul_id_reference_man`, `decisions.soul_id_reference_woman`
+**Writes to PROJECT_STATE:** `decisions.soul_id_reference_man`, `decisions.soul_id_reference_woman`
 **Version History:**
   v1.0 — Initial release (2026-05-17)
   v1.1 — Rewrote character-building procedure to require human Multishot workflow (2026-05-17)
@@ -26,10 +26,11 @@
 
 ## When This Skill Runs
 
-Only when `decisions.soul_id_required = true` AND `decisions.soul_id_reference` is empty.
+Only when `decisions.soul_id_required = true` AND (`soul_id_reference_man` is empty OR `soul_id_reference_woman` is empty for characters that appear in the casting brief).
 The CEO orchestrator inserts this skill between the `casting` and `image_generation` stages.
 
-If `decisions.soul_id_reference` is already set (Soul ID previously trained), skip to Step 5 (usage guide).
+If both `decisions.soul_id_reference_man` and `decisions.soul_id_reference_woman` are already set (Soul IDs previously trained), skip to Step 5 (usage guide).
+If only one is set, run only for the missing character.
 
 ---
 
@@ -202,7 +203,9 @@ Abstract or location-only scenes (no character present) → use gpt_image_2
 
 ```yaml
 decisions:
-  soul_id_reference: "[soul_id_string]"
+  soul_id_reference_man: "[soul_id_string]"    # set this if character is male
+  soul_id_reference_woman: "[soul_id_string]"  # set this if character is female
+  # If only one character: set the relevant field and leave the other empty
 spend_log:
   - worker: "soul_identity"
     action: "Soul ID training — [character name]"

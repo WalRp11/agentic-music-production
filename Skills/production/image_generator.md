@@ -19,20 +19,21 @@
 
 > **All scenes set in the same location MUST look like the same physical space.**
 >
-> This is non-negotiable. If the man is on a German ICE train in c03, every subsequent interior scene (c04, c05, c06, c07…) must show the EXACT SAME train interior — same seat color, same wall color, same lighting fixtures, same window shape, same door design.
+> This is non-negotiable. If a character is in a specific interior in c03, every subsequent scene in the same interior must show the EXACT SAME space — same furniture, wall color, lighting fixtures, architectural details, and door design.
 >
 > Failure: showing an ICE interior in one scene and a Soviet-era train interior in the next destroys the story's spatial logic and will require full regeneration.
 
 ### How to enforce coherence
 
 **Step 1 — Identify location groups.**
-Before generating anything, group all scenes by location:
+Before generating anything, read `Lyrics/LOCATIONS_[project_id].md` and group all scenes from `cut_list.json` by their assigned location:
 ```
-Group A: Night Platform (exterior) → c01, c26, c27, c28
-Group B: ICE Train Interior → c03, c04, c05, c06, c07, c08, c10, c13, c14, c16, c20, c21, c22, c23, c25
-Group C: Train Window Close-up → c02, c09, c12, c17, c19, c29
-Group D: Night City Through Glass → c11, c15, c18, c24
+Group A: [Location Name from LOCATIONS doc] ([interior/exterior]) → [scene IDs sharing this location]
+Group B: [Location Name] → [scene IDs]
+Group C: [Location Name] → [scene IDs]
+...
 ```
+(The number of groups equals the number of distinct locations defined in the LOCATIONS document. Do not invent groups — read them from that file.)
 
 **Step 2 — Find or generate a base reference image for each location.**
 
@@ -135,11 +136,12 @@ When both characters appear in a scene:
 
 Generate in this order to minimize regeneration:
 
-1. **Platform exterior base** (c01) → approve → use as reference for c26, c27, c28
-2. **ICE interior base** (c03 corrected) → approve → use as reference for ALL other interior scenes
-3. **Window close-up base** (c02) → approve → use as reference for c09, c12, c17, c19, c29
-4. **Abstract city-through-glass** (c11) → approve → use as reference for c15, c18, c24
-5. Then generate all remaining scenes in cut-list order, passing the approved base for their location group
+1. **First scene of each location group** — generate the base/establishing shot for every distinct location before generating any secondary scenes. This establishes the visual contract for each space.
+2. Get human approval for each location base image before continuing.
+3. Use each approved base image as the `--image` reference for all subsequent scenes in the same location group.
+4. Then generate all remaining scenes in cut-list order, passing the approved base for their location group.
+
+> The specific scene IDs for each location group are determined at runtime from `Lyrics/LOCATIONS_[project_id].md` and `Assembly/cut_list.json`. Do not hardcode them here.
 
 ---
 
@@ -151,10 +153,9 @@ Every single prompt MUST begin with the project-wide Style Lock Phrase defined i
 [STYLE LOCK PHRASE] + [Subject + action] + [Location details] + [Lighting] + [Camera spec] + [Clone guard if multiple characters]
 ```
 
-Example mandatory prompt structure:
+Example mandatory prompt structure (your actual Style Lock Phrase is written by the `location_scout` skill into `LOCATIONS_[project_id].md` — read it from there, never invent it here):
 ```
-cinematic, 35mm film grain, shallow depth of field, desaturated warm Russian winter palette,
-teal shadows amber highlights, ARRI ALEXA aesthetic, slight film halation on highlights,
+[style keywords from Global Visual Style Sheet — e.g. "cinematic, 35mm film grain, shallow depth of field, [mood palette], [camera aesthetic]"],
 [then scene-specific content]
 ```
 
@@ -208,7 +209,7 @@ For any location group with three or more scenes, use **Popcorn** in the Higgsfi
 4. Use Auto Mode for exploratory passes; Manual Mode when exact shot composition matters
 5. Export approved frames to `Images/storyboard/` with correct naming convention
 
-**Popcorn is the preferred tool** for all ICE train interior scenes (Group B: 15 scenes). Using sequential single-image generation for that many scenes in the same space will produce drift. Popcorn's continuity engine prevents it.
+**Popcorn is the preferred tool** for any location group with many scenes in the same interior space. Using sequential single-image generation for large groups in the same space will produce visual drift. Popcorn's continuity engine prevents it.
 
 ---
 
