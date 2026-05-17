@@ -18,24 +18,76 @@ Each skill file is a "worker" the CEO orchestrator assigns tasks to. The human a
 
 ## Install
 
-### Claude Code
+### Claude Code CLI
 
-```bash
-# From your project folder:
-claude --add-skill "path/to/Skills/_core/ceo_orchestrator.md"
-# Or copy all skills to .claude/skills/
-cp -r "Skills/" ~/.claude/skills/agentic-music/
+**1. Install the CEO Orchestrator as a global slash command (one-time):**
+
+```powershell
+# Windows PowerShell
+if (!(Test-Path "$env:USERPROFILE\.claude\commands")) {
+    New-Item -ItemType Directory -Path "$env:USERPROFILE\.claude\commands" -Force
+}
+Copy-Item "Skills\_core\ceo_orchestrator.md" "$env:USERPROFILE\.claude\commands\ceo_orchestrator.md" -Force
 ```
 
-### OpenAI Codex CLI
+```bash
+# macOS / Linux
+mkdir -p ~/.claude/commands
+cp Skills/_core/ceo_orchestrator.md ~/.claude/commands/ceo_orchestrator.md
+```
+
+**Optional — install all skills as global slash commands:**
+
+```powershell
+# Windows PowerShell
+Get-ChildItem "Skills" -Recurse -Filter "*.md" | ForEach-Object {
+    Copy-Item $_.FullName "$env:USERPROFILE\.claude\commands\$($_.Name)" -Force
+}
+```
 
 ```bash
-cp -r "Skills/" ~/.codex/skills/agentic-music/
+# macOS / Linux
+find Skills -name "*.md" -exec cp {} ~/.claude/commands/ \;
 ```
+
+---
 
 ### Bootstrap Your Machine (one-time)
 
-Load `Skills/_core/company_setup.md` as context and run it — it creates the full folder structure for your first project.
+Always `cd` to your company root first — skills use relative paths to load each other.
+
+```bash
+cd "C:\Users\ruppw\Agentic Music Production"   # Windows
+# cd ~/Agentic\ Music\ Production               # macOS / Linux
+claude
+```
+
+Then inside the Claude Code session, use `@` to load the skill as context:
+
+```
+@Skills/_core/company_setup.md Run this skill. Root folder: C:\Users\ruppw\Agentic Music Production
+```
+
+This creates `Brand/`, `Projects/_template/`, and all subfolders.
+
+---
+
+### Day-to-Day Usage
+
+```bash
+cd "C:\Users\ruppw\Agentic Music Production"
+claude
+```
+
+Then inside the session:
+
+```
+/ceo_orchestrator
+```
+
+The CEO will read your project state and route to the correct worker automatically.
+
+> **Note:** `/command-name` invokes installed slash commands from `~/.claude/commands/`. `@path/to/file.md` attaches any file as context inline. There is no `/add-file` command.
 
 ---
 

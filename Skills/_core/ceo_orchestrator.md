@@ -1,4 +1,4 @@
-# CEO Orchestrator — AI Skill v1.0
+# CEO Orchestrator — AI Skill v1.1
 
 **Role:** Master coordinator that reads the project state, selects the correct worker skill for the current stage, enforces stage gates, and ensures the human is consulted at every required decision point.
 **Phase:** Core
@@ -8,7 +8,9 @@
 **Human Gate:** YES — at every stage listed as "YES" in the Stage Gate Checklist
 **Reads from PROJECT_STATE:** all fields
 **Writes to PROJECT_STATE:** `current_stage`, `next_action`, `blocked`, `blocked_reason`, `last_updated`
-**Version History:** v1.0 — Initial release (2026-05-17)
+**Version History:**
+  v1.0 — Initial release (2026-05-17)
+  v1.1 — Added `lyric_alignment` and `creative_design` stages; new skills created for Whisper lyric timestamping and storyboard creative arrangement (2026-05-17)
 
 ---
 
@@ -86,6 +88,8 @@ Load the correct worker skill file (path listed below), pass the full project co
 | `locations` | `Skills/pre_production/location_scout.md` |
 | `script` | `Skills/pre_production/scriptwriter.md` |
 | `audio_production` | `Skills/production/audio_engineer.md` |
+| `lyric_alignment` | `~/.agents/skills/music-video-lyric-clip-aligner/SKILL.md` |
+| `creative_design` | `~/.agents/skills/music-video-creative-designer/SKILL.md` |
 | `image_generation` | `Skills/production/image_generator.md` |
 | `video_generation` | `Skills/production/video_generator.md` |
 | `video_edit` | `Skills/post_production/video_editor.md` |
