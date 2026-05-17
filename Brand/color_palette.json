@@ -1,0 +1,29 @@
+{
+  "_instructions": "Fill in this file after completing your first project. One entry per YouTube channel. See Brand/brand_guardian.md for field descriptions.",
+  "_last_updated": "2026-05-17",
+  "channels": {
+    "example_channel_name": {
+      "_status": "PLACEHOLDER — replace with real values after first project",
+      "youtube_url": "https://youtube.com/@your-channel-name",
+      "genre": "ballad",
+      "mood_range": ["melancholic", "cinematic", "hopeful"],
+      "primary": "#1A1A2E",
+      "secondary": "#16213E",
+      "accent": "#0F3460",
+      "highlight": "#E94560",
+      "text_light": "#FFFFFF",
+      "text_dark": "#111111",
+      "color_grade_preset": "cinematic_teal_orange",
+      "thumbnail_font": "Arial Bold",
+      "thumbnail_layout": "Left-aligned song title top third, artist name bottom left, high-contrast subject center-right",
+      "upload_cadence": "1 video per month",
+      "target_audience": "Adults 25–45 who listen to cinematic and emotional music"
+    }
+  },
+  "_notes": [
+    "Add a new channel entry for each YouTube channel you operate.",
+    "color_grade_preset must match one of: cinematic_teal_orange | warm_vintage | dark_moody | clean_pop | cold_drama",
+    "thumbnail_layout: describe your thumbnail formula in plain English so image_generator and graphic_designer can follow it.",
+    "Keep this file consistent with Brand/channel_brief.md."
+  ]
+}

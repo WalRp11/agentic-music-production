@@ -1,0 +1,44 @@
+# ─── Generated Project Files ───────────────────────────────────────────────
+# Never commit actual music projects — only the skill/framework files
+Projects/
+
+# ─── Audio & Video Files ────────────────────────────────────────────────────
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+
+# ─── Image Files ────────────────────────────────────────────────────────────
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.tiff
+*.bmp
+
+# ─── OS & Editor Noise ──────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# ─── Old Pre-Framework Project Folders (at repo root) ───────────────────────
+Luna/
+Lyrics/
+video/
+# Cyrillic folder names (Разные пути etc.) — exclude all non-framework root folders
+# Add any additional legacy project folders here
+
+# ─── Track Skills & Brand Only ──────────────────────────────────────────────
+# Everything in Skills/ and Brand/ IS tracked (no exceptions needed here)
+# PROJECT_STATE.md files inside Projects/ are excluded by the Projects/ rule above
