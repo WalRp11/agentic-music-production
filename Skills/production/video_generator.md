@@ -1,14 +1,16 @@
-# Video Generator — AI Skill v1.0
+# Video Generator — AI Skill v1.1
 
-**Role:** Converts each source image into a 10-second video clip using Higgsfield, applying the exact camera motion specified in the scene script.
+**Role:** Converts each source image into a beat-synced 10-second video clip using Higgsfield Seedance 2.0, with audio-driven prompt construction guided by the seedance_music_video skill.
 **Phase:** Production
-**Inputs:** `Images/c*.png` (all generated source images), `Lyrics/music-video-script.md` (video motion specs), `Assembly/cut_list.json`
+**Inputs:** `Images/c*.png` (all generated source images), `Lyrics/music-video-script.md` (video motion specs), `Assembly/cut_list.json`, `Sound/master.mp3` (audio reference for beat sync), `Skills/production/seedance_music_video.md` (prompt construction guide)
 **Outputs:** `Clips/c[01-N]_[scene_name].mp4` — one raw clip per scene
 **Tools:** Higgsfield CLI (`higgsfield generate video`)
 **Human Gate:** NO — batch run (Capex gate already approved)
 **Reads from PROJECT_STATE:** `asset_registry.images`, `decisions.capex_approved`
 **Writes to PROJECT_STATE:** `asset_registry.clips`, `current_stage → video_edit`
-**Version History:** v1.0 — Initial release (2026-05-17)
+**Version History:**
+  v1.0 — Initial release (2026-05-17)
+  v1.1 — Added @audio1 beat-sync, seedance_music_video prompt guide reference (2026-05-18)
 
 ---
 
@@ -52,29 +54,59 @@ Use these exact motion descriptions in video prompts:
 
 ## Step 1 — Build Generation Queue
 
+### 1a — Read the beat-sync guide
+
+Before writing any prompts, read `Skills/production/seedance_music_video.md` and derive from the project files:
+- **Genre**: read `PROJECT_STATE.md` → `mood` field; match to the closest Genre Visual Language section in the guide
+- **Narrative pattern**: read `Lyrics/music-video-script.md` → identify which Narrative Pattern (1–5) fits the story structure
+- **Beat-sync hooks**: read `Lyrics/timestamps_aligned.json` → map each section (verse/chorus/bridge/outro) to its start time; apply the relevant 2-Second Hook types from the guide to chorus and peak-intensity scenes
+- **Audio file**: identify the master audio file from `Sound/` folder → reference as `@audio1` in the `--audio` flag
+
+### 1b — Construct prompts per clip
+
+For each clip, build the prompt in three layers:
+```
+[Image scene description from script]
++ ", " + [motion spec from Camera Motion Vocabulary]
++ ", " + [beat-sync descriptor derived from timestamps_aligned.json and seedance_music_video.md]
+```
+
+**How to derive beat-sync descriptors:**
+1. Read `Lyrics/timestamps_aligned.json` — note the `start` time of each section
+2. For each clip in `cut_list.json`, check which section it belongs to (from `storyboard_arrangement.md`)
+3. Apply intensity rules from `seedance_music_video.md`:
+   - Instrumental/ambient sections → `minimal energy, ambient stillness`
+   - Verse sections → `verse energy, [genre-appropriate] intimate motion, synced to [primary instrument] rhythm`
+   - Chorus sections → `chorus peak at [timestamp], [hook type from guide], maximum emotional intensity`
+   - Interlude/bridge → `breath moment, reduced energy, [contrasting motion from chorus]`
+   - Outro → `energy fading, slow pull-back, resolve to stillness`
+4. Add the project's color grade style as a suffix (read from `Assembly/storyboard_arrangement.md` → `Color grade target`)
+
+**Full prompt construction template:**
+```
+"[scene description from script],
+[motion spec],
+@audio1, [section label] at [timestamp from timestamps_aligned.json], [intensity descriptor],
+[color grade style from storyboard_arrangement.md]"
+```
+
+### 1c — CLI command template
+
 For each entry in `cut_list.json`, create a generation command:
 
 ```bash
 higgsfield generate video \
-  --image "Images/c01_[scene_name].png" \
-  --prompt "[scene description from script] + [motion spec from script]" \
+  --image "Images/c[NN]_[scene_name].png" \
+  --audio "Sound/[master_audio_file]" \
+  --prompt "[full prompt from Step 1b]" \
   --duration 10 \
-  --output "Clips/c01_[scene_name].mp4" \
+  --output "Clips/c[NN]_[scene_name].mp4" \
   --model seedance_2
 ```
 
 **Model selection:**
 - `seedance_2` — default for all standard clips (best quality for cinematic motion)
 - `kling_3` — alternative if seedance_2 fails or for more dramatic motion
-
-**Full prompt construction:**
-```
-[Original image prompt from script] + ", " + [motion spec]
-
-Example:
-"empty coffee shop interior before opening, early morning blue light, chairs upturned,
-static shot, no camera movement, 10 seconds, cinematic"
-```
 
 ---
 

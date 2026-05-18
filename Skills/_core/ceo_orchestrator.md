@@ -47,6 +47,15 @@ If no project folder exists yet: Ask the human: *"Do you want to start a new pro
 - New project from scratch → create `Projects/[Song Title]/` with all subfolders (copy from `Projects/_template/`), copy `PROJECT_STATE.md` from `Skills/_core/project_memory_template.md`, set `current_stage: intake`.
 - Existing project with files → create folder structure as above, copy existing files into `Sound/` or appropriate folder, then route to `project_intake`.
 
+### Step 1a — Check for agent skill updates
+Run silently in the background:
+```bash
+npx skills check
+```
+- If any updates are available: report them to the human as a one-line notice before proceeding (e.g. *"🔄 Agent skill update available: higgsfield-generate v0.4.0"*).
+- If no updates: proceed silently.
+- Do NOT block on this step. If `npx` is not available or the command fails, skip and continue.
+
 ### Step 2 — Read PROJECT_STATE.md
 Load and parse the full `PROJECT_STATE.md` for the named project.
 
@@ -159,6 +168,34 @@ Load the correct worker skill file (path listed below), pass the full project co
 - After every visual worker (`image_generation`, `motion_design`, `graphics`): silently cross-check outputs against `Brand/brand_guardian.md` before advancing stage.
 - Budget tracking runs silently alongside every worker that makes API calls.
 - **Research advisor routing:** See table below.
+- **Agent skill co-loading:** See table below.
+
+---
+
+## Agent Skill Co-Load Table
+
+For stages that have a matching installed agent skill, load BOTH the project skill (for pipeline logic and gates) AND the agent skill (for current CLI syntax, model catalog, and execution detail). The agent skill takes precedence on all CLI commands and model names; the project skill takes precedence on all gate, quality, and sequencing rules.
+
+| Stage | Project Skill | Agent Skill Path | Co-load? |
+|---|---|---|---|
+| `script` | `Skills/pre_production/scriptwriter.md` | `~/.agents/skills/music-video-scriptwriter/SKILL.md` | YES |
+| `locations` | `Skills/pre_production/location_scout.md` | `~/.agents/skills/music-video-location-scout/SKILL.md` | YES |
+| `creative_design` | `Skills/pre_production/creative_designer.md` | `~/.agents/skills/music-video-creative-designer/SKILL.md` | YES |
+| `lyric_alignment` | `Skills/production/lyric_aligner.md` | `~/.agents/skills/music-video-lyric-clip-aligner/SKILL.md` | YES |
+| `soul_identity` | `Skills/production/soul_identity.md` | `~/.agents/skills/higgsfield-soul-id/SKILL.md` | YES |
+| `image_generation` | `Skills/production/image_generator.md` | `~/.agents/skills/higgsfield-generate/SKILL.md` | YES |
+| `video_generation` | `Skills/production/video_generator.md` | `~/.agents/skills/higgsfield-generate/SKILL.md` + `Skills/.agents/skills/seedance-music-video/SKILL.md` | YES |
+| `video_edit` | `Skills/post_production/video_editor.md` | `Skills/.agents/skills/ffmpeg-video-editor/SKILL.md` | YES |
+
+**Co-load procedure:**
+```
+1. Load project skill first — read all pipeline rules, gates, and quality checks into context.
+2. Load agent skill second — read CLI syntax, model catalog, and authentication steps.
+3. If any conflict between the two: project skill wins on WHAT to do; agent skill wins on HOW to execute it.
+4. After execution, write results back per the project skill's output spec (file paths, PROJECT_STATE fields).
+```
+
+**Version drift check:** If the agent skill's version header is newer than the project skill's Version History, note the discrepancy in PROJECT_CONTEXT.md and flag it for the next retrospective so the project skill can be updated.
 
 ---
 

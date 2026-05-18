@@ -12,6 +12,7 @@
   v1.0 — Initial release (2026-05-17)
   v1.1 — Added location coherence rules, reference image workflow, storyboard-first gate (2026-05-17)
   v1.2 — Added Style Lock Phrase enforcement, Soul HEX colour anchoring, Soul Cinema model for close-ups, Popcorn multi-frame workflow (2026-05-17)
+  v1.3 — Added Architectural Element Pre-Catalog (Step 2b) — mandatory pre-generation catalog of specific architectural sub-elements with reference photos; two-retry limit with fallback to web UI edit or compositing (2026-05-18)
 
 ---
 
@@ -47,6 +48,35 @@ For exterior or abstract locations:
 - Human approves it
 - Use that approved image as `--image` reference for all subsequent scenes in the same location
 
+**Step 2b — Architectural Element Pre-Catalog (run before generating ANY scene).**
+
+Scan every scene in the script and `cut_list.json` for **specific architectural sub-elements** — any detail that is non-generic and that the script or storyboard names explicitly:
+- Door types (sliding plug doors, hinged doors, barn doors, automatic glass doors)
+- Window shapes (oval porthole, panoramic floor-to-ceiling, arched)
+- Fixtures (overhead rack style, seat headrest type, handrail design)
+- Any element described with a qualifier beyond "door" or "window"
+
+For each identified element:
+1. Search Wikimedia Commons or free stock for a real photograph of that EXACT element (e.g., "ICE 3 Railjet sliding plug door interior side view").
+2. Save to `Images/[element_name]_reference.jpg` (e.g., `Images/ice_sliding_door_reference.jpg`).
+3. Add it to the element catalog table below and note which scenes require it.
+
+```
+Element Catalog (fill in at Step 2b):
+| Element | Reference saved to | Required in scenes |
+|---------|-------------------|--------------------|
+| [name]  | Images/[file].jpg | [c05, c07, ...]    |
+```
+
+> **Do not begin generating any scene** that contains a cataloged element until its reference photo is saved and logged.
+
+**Why this matters:** Text-only prompts cannot reliably generate architecturally specific elements. The model will default to the most common variant (e.g., hinged glass doors instead of sliding plug doors) regardless of how precisely the prompt describes the difference. A reference photo is the only reliable anchor. This protocol was introduced after c05 (ICE sliding door) was rejected twice on 2026-05-18.
+
+**If the model still fails with a reference image (after one retry):**
+- Switch to GPT Image 2 web UI and use the reference photo as an edit input rather than `--image`.
+- Or treat the element as a compositing task: generate the scene without the problematic element, then composite the element in during post-production.
+- Do NOT retry the same prompt a third time without changing the approach.
+
 **Step 3 — Generate the first scene of each location group using the reference image.**
 ```bash
 higgsfield generate create gpt_image_2 \
@@ -79,7 +109,7 @@ higgsfield generate create text2image_soul_v2 \
 Before saving any generated image, verify:
 - Same seat/furniture design as the base image
 - Same window shape and placement
-- Same door style (ICE sliding glass door ≠ old compartment door with oval windows)
+- Same door style as the base image (e.g. sliding glass doors must stay sliding glass, not hinged)
 - No missing or malformed furniture (check seat count per row matches reference)
 - No architectural errors (diagonal window frames, impossible geometry)
 
@@ -88,6 +118,8 @@ If the image fails any check: regenerate with a more explicit structural descrip
 ---
 
 ## Pre-Flight Checks
+
+**If a specific location has distinctive architectural details** (e.g. a particular door type, window shape, or fixture): consult the project's `PROJECT_CONTEXT.md` for any project-specific generation notes or negative constraints before running.
 
 Before any generation:
 ```

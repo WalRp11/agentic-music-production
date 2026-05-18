@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "ffmpeg-video-editor": {
+      "source": "sundial-org/awesome-openclaw-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ffmpeg-video-editor/SKILL.md",
+      "computedHash": "c50ad166c0b6b916007871c60ea6c75cd45a571d7669559ee7c163c995304c93"
+    },
+    "seedance-music-video": {
+      "source": "beshuaxian/higgsfield-seedance2-jineng",
+      "sourceType": "github",
+      "skillPath": "skills/10-music-video/zh-CN/SKILL.md",
+      "computedHash": "019a3c54b5b0b2751db6f8368e4ee7a1057a8a3edf1da02e3f703bc66e9c4a7e"
+    }
+  }
+}

@@ -44,6 +44,8 @@
 ```
 [2026-05-17] Model: gpt_image_2 is the standard for storyboard images. Use soul_cinematic for Soul ID close-ups.
 [2026-05-17] Location coherence: always use --image [reference_photo] for all scenes in the same interior location. Without it, the same "room" will look different in every scene.
+[2026-05-18] Chain reference limitation: the --image reference anchors only what IS visible in that image. Details NOT in the reference (e.g., a specific door type, a window macro) are generated from model priors and are often wrong. For each unique architectural element, pre-generate and approve a dedicated reference image before generating scenes that feature it.
+[2026-05-18] Sliding doors cannot be reliably prompted: ICE train sliding plug doors (horizontal sliding, full-height glass panel) are consistently generated as hinged glass doors or wrong styles by text2image_soul_v2. A dedicated reference image of the correct door must be pre-generated and approved first.
 [2026-05-17] Resolution: always 2k for storyboard images. 1k is acceptable only for quick test iterations.
 [2026-05-17] Aspect ratio: always 16:9 for standard music video output.
 [2026-05-17] Soul HEX color anchoring: include the exact hex color of key wardrobe/environment elements in the prompt when coherence matters (e.g., "ICE 3 train seat color #D4C5A9").
@@ -108,6 +110,8 @@
 [2026-05-17] Soul ID variant mismatch: soul-cinematic trained variant is incompatible with text2image_soul_v2. Always confirm variant compatibility before training.
 [2026-05-17] Script → cut_list.json timestamp estimates are often off by 5-10s. Always run lyric_aligner after audio selection to correct timestamps with Whisper data.
 [2026-05-17] image_generation: always use per-image human approval gate. Batch-generating all images at once before human review wastes budget on rejected scenes.
+[2026-05-18] OPEN REVISION TASK — Storyboard consistency: current workflow cannot reliably generate specific architectural details (e.g., ICE train sliding plug doors) from text prompts alone. The chain reference approach (passing an approved image as --image) provides spatial context but only anchors what is visible in that reference. Elements NOT visible in the reference (a specific door type, a specific window shape) default to model priors — often wrong. Must research: (1) pre-generating dedicated reference images for each unique architectural element (door, aisle, window macro); (2) alternative models with stronger reference adherence; (3) whether a ControlNet-style or inpainting workflow exists in Higgsfield. This is the single biggest quality bottleneck in the image_generation stage as of 2026-05-18.
+[2026-05-18] OPEN REVISION TASK — Soul ID + architecture: text2image_soul_v2 is optimized for face consistency, not environment consistency. When a scene requires BOTH Soul ID face AND a precise architectural element (e.g., a specific door), these two constraints compete. Consider generating the architecture first (no Soul ID), approving it, then using it as --image reference in a Soul ID generation run — so the face is layered onto an already-correct background.
 ```
 
 ---
